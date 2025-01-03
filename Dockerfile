@@ -2,7 +2,7 @@
 FROM ubuntu:22.04 AS base
 
 # Metadata
-LABEL maintainer="me"
+LABEL maintainer="ubuntuuser"
 LABEL description="Hardened Ubuntu container image"
 
 # Ensure non-interactive

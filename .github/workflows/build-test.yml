@@ -1,0 +1,38 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t ubuntu-hardened:latest \
+            .
+
+      - name: Run a Test Container (optional)
+        run: |
+          # Example: Just echo something or run some tests in the container
+          docker run --rm ubuntu-hardened:latest echo "Running inside hardened container..."
+
+      - name: Security Scan with Trivy (optional)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ubuntu-hardened:latest
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+          format: 'table'
