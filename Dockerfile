@@ -4,6 +4,7 @@ FROM ubuntu:22.04 AS base
 # Metadata
 LABEL maintainer="ubuntuuser"
 LABEL description="Hardened Ubuntu container image"
+LABEL source="https://github.com/kelleyblackmore/ubuntu-hardened"
 
 # Ensure non-interactive
 ENV DEBIAN_FRONTEND=noninteractive
