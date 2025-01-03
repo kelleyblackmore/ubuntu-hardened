@@ -1,0 +1,61 @@
+name: Build and Push to GHCR
+
+on:
+  push:
+    branches: [ "main" ]
+  # Uncomment if you want to allow manual triggers:
+  # workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      # Provide the default GITHUB_TOKEN permissions to write packages
+      packages: write
+      # (If you use GHCR_PAT secret, not strictly needed here, but required if using GITHUB_TOKEN)
+      # contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU (if you do multi-arch builds)
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          # Option 1: Use GITHUB_TOKEN
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          # Option 2 (comment out the above, uncomment below):
+          # username: ${{ github.actor }}
+          # password: ${{ secrets.GHCR_PAT }}
+
+      - name: Build and Push
+        run: |
+          # Replace <OWNER> with your GitHub username or org name
+          # Replace <REPO> with your repo name
+          # e.g., ghcr.io/myusername/ubuntu-hardened:latest
+          IMAGE_NAME=ghcr.io/<OWNER>/<REPO>/ubuntu-hardened:latest
+
+          echo "Building and pushing $IMAGE_NAME"
+
+          # Build the image
+          docker build -t $IMAGE_NAME .
+
+          # Push the image
+          docker push $IMAGE_NAME
+      - name: Security Scan with Trivy (optional)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: $IMAGE_NAME
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+          format: 'table'
