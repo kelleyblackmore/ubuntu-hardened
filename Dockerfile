@@ -16,10 +16,6 @@ RUN apt-get update \
        # Possibly other packages your app needs
     && rm -rf /var/lib/apt/lists/*
 
-# Remove or lock down any default setuid binaries not needed
-
-RUN apt-get purge -y iputils-ping \
-    && chmod 755 /bin/ping
 
 # Create non-root user and group
 ARG USER_NAME=ubuntuuser
