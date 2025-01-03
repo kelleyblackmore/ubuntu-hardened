@@ -1,6 +1,3 @@
-Below is a **sample README** you can include in your repository. It showcases the project’s purpose, how to build locally, how the GitHub Actions workflow works, and includes your build status badge.
-
-```markdown
 # Ubuntu Hardened
 
 [![Build and Push to GHCR](https://github.com/kelleyblackmore/ubuntu-hardened/actions/workflows/build-push-ghcr.yml/badge.svg)](https://github.com/kelleyblackmore/ubuntu-hardened/actions/workflows/build-push-ghcr.yml)
